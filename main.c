@@ -1,63 +1,102 @@
-
 //created by Dana
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+const int N = 100;
 const double ERROR = 0.2;
-const double Ex = 0.15;
+int ReadFile();
+void PrintDekrem();
+//void PrintFile();
 double CalculateDekrem();
 double Average();
-double Error();
 int main()
 {
+    double n[100] = {}, A1[100] = {}, A2[100] = {}, Dekrem[100] = {};
+    int nPoints = ReadFile(n, A1, A2, N);
+    *Dekrem = CalculateDekrem(n, A1, A2, nPoints, Dekrem);
+    double ave = Average(Dekrem, nPoints);
+    //PrintFile( n, A1, A2, nPoints-1);
+    printf("%d\n", nPoints);
+    printf("%.2lf\n", ave);
+    PrintDekrem( Dekrem, nPoints);
+    return 0;
+}
+
+int ReadFile(double *n, double *A1, double *A2, int num)
+{
+    int i = 0;
     FILE* f1 = fopen("data.txt", "r");
-    FILE* f2 = fopen("result.txt", "w");
-    if ( f1 == NULL || f2 == NULL)
+    if ( f1 == NULL )
     {
         printf("could not open file\n");
     }
-    double A1 = 0, A2 = 0, n = 0, Sum = 0;
-    int nPoints = 0;
-    while(!feof(f1))
-        {
-            fscanf(f1, "%lf%lf%lf", &A1, &A2, &n);
-            nPoints++;
-            double Dekrem = CalculateDekrem( n, A1, A2);
-            Sum = Sum + Dekrem;
-            fprintf(f2, "Dekrement = %.2lf\n", Dekrem);
-            if ( Dekrem < Ex + ERROR && Dekrem > Ex - ERROR )
-            {
-                fprintf(f2, "OK\n");
-            }
-            else
-                fprintf(f2, "BAD\n");
-        }
-    //double ave = Average(Sum, nPoints);
-//    fprintf(f2, "Average = %.2lf\n", ave);
+    for( i = 0; !feof(f1) ; i++)
+    {
+            fscanf(f1, "%lf%lf%lf", &A1[i], &A2[i], &n[i]);
+    }
     fclose(f1);
-    fclose(f2);
-    return 0;
+    return i-1;
 }
-double CalculateDekrem( double n, double A1, double A2)
+
+void PrintDekrem( double *Dekrem, int num, double ave)
 {
-        if ( A2 == 0 || n == 0)
+    FILE* f2 = fopen("result.txt", "w");
+    if ( f2 == NULL)
+    {
+        printf("could not open file\n");
+    }
+    for ( int i = 0; i < num; i++)
+    {
+        if ( (Dekrem[i] <= (ave + ERROR)) && (Dekrem[i] >= (ave - ERROR)))
+        {
+            fprintf(f2, "Dekrement =  %.2lf \n GOOD\n", Dekrem[i]);
+        }
+        else
+            fprintf(f2, "Dekrement = %.2lf \n BAD\n", Dekrem[i]);
+    }
+    fclose(f2);
+}
+
+/*void PrintFile( double *n, double *A1, double *A2, int num)
+{
+    FILE* f2 = fopen("result.txt", "w");
+    if ( f2 == NULL)
+    {
+        printf("could not open file\n");
+    }
+    for ( int i = 0; i < num; i++)
+    {
+        fprintf(f2, "%.2lf %.2lf %.2lf\n", n[i], A1[i], A2[i]);
+    }
+    fclose(f2);
+}*/
+
+double CalculateDekrem( double *n, double *A1, double *A2, int num, double *Dekrem)
+{
+    for ( int i = 0; i < num; i++)
+    {
+        if ( A2[i] == 0.0 || n[i] == 0.0)
             {
-                printf("Division by zero in result %lf is impossible", n);
+                printf("Division by zero in result %lf is impossible", n[i]);
                 return 33;
             }
-        if ( (A1/A2) <= 0 )
+        if ( (A1[i]/A2[i]) <= 0.0 )
             {
-                printf("Calculation the log in result %lf is impossible", n );
+                printf("Calculation the log in result %lf is impossible", n[i] );
                 return 42;
             }
-        double Dekrem = 1/n * log(A1/A2);
-        return Dekrem;
+        Dekrem[i] = 1/n[i] * log(A1[i]/A2[i]);
+    }
+        return *Dekrem;
 }
-/*double Average( double A, int n)
+double Average( double *A, int n)
 {
-    double ave = A / n;
+    double Sum = 0;
+    for ( int i = 0; i < n; i++ )
+    {
+      Sum = Sum + A[i];
+    }
+    double ave = Sum / n;
     return ave;
 }
-*/
-
