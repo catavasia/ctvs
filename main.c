@@ -101,7 +101,7 @@ int CalculateDekrem( double *n, double *A1, double *A2, int num, double *Dekrem)
     {
         if ( A2[i] < tol)
         {
-            printf("Value %lf is out of range", A2[i]);
+            printf("Value %.2lf is out of range", A2[i]);
             return 33;
         }
         if ( (A1[i]/A2[i]) <= 0.0 )
@@ -111,9 +111,9 @@ int CalculateDekrem( double *n, double *A1, double *A2, int num, double *Dekrem)
         }
         if ( n[i] < tol )
         {
-            printf("Something wrong with n");
+            printf("Something wrong with %.2lf", n[i] );
         }
-        Dekrem[i] = 1/n[i]* log(A1[i]/A2[i]);
+        Dekrem[i] = 1/n[i] * log(A1[i]/A2[i]);
         printf("%lf\n", Dekrem[i]);
     }
     return 3;
@@ -135,7 +135,7 @@ double Deviation( double *D, double ave, int num)
     double res = 0;
     for ( int i = 0; i < num; i++)
      {
-         res = res + (D[i]- ave)*(D[i]- ave);
+         res = res + (D[i]- ave) * (D[i]- ave);
      }
     double fres = sqrt(res / num );
     return fres;
