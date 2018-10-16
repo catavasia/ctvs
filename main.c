@@ -31,14 +31,22 @@ int main()
     //PrintFile( n, A1, A2, NPoints);
    // printf("%.2lf\n", ave);
     PrintDekrem(Dekrem, NPoints, ave, error);
+    free(A1);
+    free(A2);
+    free(n);
+    free(Dekrem);
     return 0;
 }
 
 int Num_of_str()
 {
-    int NStr = 0;
+    int NStr = 1;
     char s = 0;
     FILE* f1 = fopen("data.txt", "r");
+    if ( f1 == NULL )
+    {
+        printf("could not open data\n");
+    }
     while( fscanf(f1,"%c", &s) != EOF )
     {
         if ( s == '\n')
