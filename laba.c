@@ -85,7 +85,7 @@ int ReadFile(double *n, double *A1, double *A2, int num)
     int c_A2 = Check_ptr(A2);
     if( c_n + c_A1 + c_A2 != 0)
 		printf(" Error check_ptr");
-        return ERROR_READFILE_CHECK_PTR;
+        return ERROR_CHECK_PTR_READFILE;
     int i = 0;
     FILE* f1 = fopen("data.txt", "r");
     if ( f1 == NULL )
